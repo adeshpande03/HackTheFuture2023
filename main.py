@@ -120,7 +120,7 @@ def main():
     while run:
         global SPEED 
         global OBJECTSPEED
-        spaceship.update_score(0.001)
+        spaceship.update_score(0.1)
         clock.tick(60)
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
