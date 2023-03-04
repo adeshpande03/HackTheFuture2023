@@ -37,14 +37,14 @@ class Spaceship:
         self.mass += increase
 
 
-def draw_background(shooting_stars):
-    WIN.blit(BACKGROUND, (0,0))
-    for star in shooting_stars:
-        if(star.y < HEIGHT):
-            star.y += SPEED
-            pygame.draw.rect(WIN, (255,255,255), star)
-        else:
-            shooting_stars.remove(star)
+# def draw_background(shooting_stars):
+#     WIN.blit(BACKGROUND, (0,0))
+#     for star in shooting_stars:
+#         if(star.y < HEIGHT):
+#             star.y += SPEED
+#             pygame.draw.rect(WIN, (255,255,255), star)
+#         else:
+#             shooting_stars.remove(star)
 
 
 def handle_movement(keys_pressed,spaceship):
