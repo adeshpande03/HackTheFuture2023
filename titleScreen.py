@@ -7,7 +7,8 @@ def generateTitle():
                 "The object of this game is to collect space garbage!",
                 "Watch out for asteroids! If you get too close, the gravitational field may pull you in!",
                 "You will start with three lives.",
-                "If you get yourself into a sticky situation, press spacebar to temporarily accelerate!"]
+                "If you get yourself into a sticky situation, press spacebar to temporarily accelerate!",
+                "Boost only activates when your boost percentage is at 100, so use it wisely!"]
     customtkinter.set_appearance_mode("dark")  # Modes: system (default), light, dark
     customtkinter.set_default_color_theme(
         "blue"

@@ -36,6 +36,10 @@ def handle_movement(keys_pressed, spaceship):
         spaceship.x -= SPEED
     if keys_pressed[pygame.K_RIGHT] and spaceship.x + SPEED + spaceship.width < WIDTH:
         spaceship.x += SPEED
+    if keys_pressed[pygame.K_DOWN] and spaceship.y + SPEED + spaceship.height < HEIGHT:
+        spaceship.y += SPEED
+    if keys_pressed[pygame.K_UP] and spaceship.y - SPEED > 0:
+        spaceship.y -= SPEED
 
 
 def handle_falling_obj(falling_obj, spaceship, sp):
