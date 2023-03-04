@@ -8,7 +8,7 @@ class Spaceship:
         self.speed = speed
         self.mass = mass
         self.score = 0
-        self.boost = 100
+        self.boost = 0
 
     def update_lives(self):
         if self.lives - 1 > -1:

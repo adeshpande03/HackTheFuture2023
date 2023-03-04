@@ -2,16 +2,16 @@ import random
 from spaceship import *
 import pygame
 import random
-
+import math
 pygame.init()
-WIDTH, HEIGHT = 600, 800
+WIDTH, HEIGHT = 800, 800
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Spaceship Game")
 
 SPEED = 3
 OBJECTSPEED = 2
 ASTEROID_MASS = 30
-BACKGROUND = pygame.image.load("space-bg.jpg")
+BACKGROUND = pygame.image.load("space-bg-v4.jpg")
 BACKGROUND = pygame.transform.scale(BACKGROUND, (WIDTH, HEIGHT))
 
 SPACESHIP = pygame.image.load("spaceship.png")
@@ -19,9 +19,9 @@ SPACESHIP = pygame.transform.scale(SPACESHIP, (40, 40)).convert_alpha()
 
 HEART = pygame.transform.scale(pygame.image.load("heart.png"), (10, 10))
 
-GARBAGE = pygame.transform.scale(pygame.image.load("trash-v2.png"), (60, 60))
+GARBAGE = pygame.transform.scale(pygame.image.load("trash-v2.png"), (75, 75))
 ASTEROID = pygame.transform.scale(pygame.image.load("asteroid-v2.png"), (60, 60))
-BOOST = pygame.transform.scale(pygame.image.load("boost-v2.png"), (40, 40))
+BOOST = pygame.transform.scale(pygame.image.load("boost-v3.png"), (40, 40))
 
 
 FONT = pygame.font.Font("freesansbold.ttf", 12)
@@ -45,9 +45,16 @@ def handle_movement(keys_pressed, spaceship):
 
 def asteroid_gravity(falling_asteroids, spaceship):
     asteroid_mass = 50
+    xAccel, yAccel = 0, 0
     for asteroid in falling_asteroids:
-        radius = ((asteroid.x - spaceship.x)**2 + (asteroid.y - spaceship.y)**2)**.5
-        
+        G = .08
+        degree = math.atan2(asteroid.y - spaceship.y, asteroid.x - spaceship.x)
+        radiusSquared = ((asteroid.x - spaceship.x)**2 + (asteroid.y - spaceship.y)**2)
+        xAccel += G*ASTEROID_MASS/(radiusSquared) * math.cos(degree)
+        yAccel += G*ASTEROID_MASS/(radiusSquared) * math.sin(degree)
+    spaceship.x += xAccel
+    spaceship.y += yAccel  
+    
     
 def draw_text(spaceship):
     lives_text = FONT.render('Lives:', True, (255,255,255))
@@ -199,6 +206,7 @@ def main():
             falling_garbage.append(obj)
             garbage_elapsed = 0  
 
+        asteroid_gravity(falling_asteroids, spaceship_rect)
         handle_movement(keys_pressed, spaceship_rect)
         draw_game(spaceship_rect, falling_asteroids, spaceship, falling_boost, falling_garbage)
         if spaceship.lives == 0:
