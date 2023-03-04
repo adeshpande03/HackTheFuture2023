@@ -40,7 +40,12 @@ def handle_movement(keys_pressed, spaceship):
         spaceship.y += SPEED
     if keys_pressed[pygame.K_UP] and spaceship.y - SPEED > 0:
         spaceship.y -= SPEED
-
+        
+def draw_text(spaceship):
+    lives_text = FONT.render('Lives:', True, (255,255,255))
+    WIN.blit(lives_text, (500, 20))
+    for life in range(1,spaceship.lives+1):
+        WIN.blit(HEART, (lives_text.get_width() + 500 + HEART.get_width()*life, 20))
 
 def handle_falling_obj(falling_obj, spaceship, sp):
     for obj in falling_obj:
