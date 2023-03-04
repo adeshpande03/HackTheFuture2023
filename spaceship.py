@@ -34,4 +34,4 @@ class Spaceship:
         return (self.speed-MIN_SPEED)/MAX_SPEED
 
     def update_score(self, increase):
-        self.score += 1
+        self.score += increase
