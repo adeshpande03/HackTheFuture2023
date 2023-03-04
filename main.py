@@ -24,6 +24,7 @@ FALLING_OBJ = ["ASTEROID", "BOOST"]
 
 FONT = pygame.font.Font('freesansbold.ttf', 12)
 
+boost_percentage = 0
 
 def draw_background(shooting_stars):
     WIN.blit(BACKGROUND, (0, 0))
@@ -47,7 +48,9 @@ def handle_movement(keys_pressed, spaceship):
 
 def draw_text(spaceship):
     lives_text = FONT.render('Lives:', True, (255,255,255))
+    boost_text = FONT.render(f'Boost: {boost_percentage}%', True, (255, 255, 255))
     WIN.blit(lives_text, (500, 20))
+    WIN.blit(boost_text, (500, 40))
     for life in range(1,spaceship.lives+1):
         WIN.blit(HEART, (lives_text.get_width() + 500 + HEART.get_width()*life, 20))
 
