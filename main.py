@@ -10,7 +10,7 @@ pygame.display.set_caption("Spaceship Game")
 
 SPEED = 3
 OBJECTSPEED = 2
-
+ASTEROID_MASS = 30
 BACKGROUND = pygame.image.load("space-bg.jpg")
 BACKGROUND = pygame.transform.scale(BACKGROUND, (WIDTH, HEIGHT))
 
@@ -43,25 +43,34 @@ def handle_movement(keys_pressed, spaceship):
         spaceship.y -= SPEED
 
 
-
+def asteroid_gravity(falling_asteroids, spaceship):
+    asteroid_mass = 50
+    for asteroid in falling_asteroids:
+        radius = ((asteroid.x - spaceship.x)**2 + (asteroid.y - spaceship.y)**2)**.5
+        
+    
 def draw_text(spaceship):
     lives_text = FONT.render('Lives:', True, (255,255,255))
     boost_text = FONT.render(f'Boost: {spaceship.boost}%', True, (255, 255, 255))
     score_text = FONT.render(f'Score: {int(spaceship.score)}', True, (255, 255, 255))
-    mass_text = FONT.render(f'Mass: {int(spaceship.mass)}', True, (255, 255, 255))
-    WIN.blit(lives_text, (500, 40))
-    WIN.blit(boost_text, (500, 60))
-    WIN.blit(score_text, (500,20))
-    WIN.blit(mass_text, (500, 80))
+    mass_text = FONT.render(f'Mass: {(spaceship.mass)} kg', True, (255, 255, 255))
+    asteroid_mass_text = FONT.render(f'Asteroid Mass: {ASTEROID_MASS} kg', True, (255, 255, 255))
+    xPos = 470
+    WIN.blit(lives_text, (xPos, 40))
+    WIN.blit(boost_text, (xPos, 60))
+    WIN.blit(score_text, (xPos,20))
+    WIN.blit(mass_text, (xPos, 80))
+    WIN.blit(asteroid_mass_text, (xPos, 100))
     for life in range(1,spaceship.lives+1):
-        WIN.blit(HEART, (lives_text.get_width() + 500 + HEART.get_width()*life, 40))
+        WIN.blit(HEART, (lives_text.get_width() + xPos + HEART.get_width()*life, 40))
 
 def handle_falling_asteroids(falling_obj, spaceship, sp):
     for obj in falling_obj:
         if obj.y + OBJECTSPEED > HEIGHT:
             falling_obj.remove(obj)
         elif obj.colliderect(spaceship):
-            sp.update_lives()
+            if sp.mass <= ASTEROID_MASS:
+                sp.update_lives()
             falling_obj.remove(obj)
         else:
             obj.y += OBJECTSPEED
@@ -114,12 +123,11 @@ def main():
     boost_elapsed = 0
     garbage_elapsed = 0
     speed_timer = 0
-    boost_use_timer = 0
-    boost_used = False
     SPACE_EVENT = pygame.USEREVENT + 1
     while run:
         global SPEED 
         global OBJECTSPEED
+        global ASTEROID_MASS
         spaceship.update_score(0.1)
         clock.tick(60)
         for e in pygame.event.get():
@@ -145,9 +153,10 @@ def main():
         #     boost_used = False
 
         speed_timer += clock.tick()
-        if speed_timer > 300:
+        if speed_timer > 350:
             SPEED += 1
             OBJECTSPEED += 1
+            ASTEROID_MASS += 15
             speed_timer = 0
             
         
