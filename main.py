@@ -3,6 +3,7 @@ from spaceship import *
 import pygame
 import os
 
+pygame.init()
 WIDTH, HEIGHT = 600, 800
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Spaceship Game")
