@@ -2,12 +2,13 @@ MAX_SPEED = 10
 MIN_SPEED = 3
 
 class Spaceship:
-    def __init__(self, mass=20, speed=3):
+    def __init__(self, mass=20, speed=3, boost = 0):
         self.lives = 3
         self.speed = speed
         self.mass = mass
         self.score = 0
-
+        self.boost = boost
+        
     def update_lives(self):
         if self.lives - 1 > -1:
             self.lives-=1
