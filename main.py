@@ -19,9 +19,10 @@ SPACESHIP = pygame.transform.scale(SPACESHIP, (40, 40)).convert_alpha()
 
 HEART = pygame.transform.scale(pygame.image.load("heart.png"), (10, 10))
 
+GARBAGE = pygame.transform.scale(pygame.image.load("trash-v2.png"), (60, 60))
 ASTEROID = pygame.transform.scale(pygame.image.load("asteroid-v2.png"), (60, 60))
 BOOST = pygame.transform.scale(pygame.image.load("boost-v2.png"), (40, 40))
-FALLING_OBJ = ["ASTEROID", "BOOST"]
+
 
 FONT = pygame.font.Font("freesansbold.ttf", 12)
 
@@ -44,7 +45,7 @@ def handle_movement(keys_pressed, spaceship):
 
 def draw_text(spaceship):
     lives_text = FONT.render('Lives:', True, (255,255,255))
-    boost_text = FONT.render(f'Boost: {boost_percentage}%', True, (255, 255, 255))
+    boost_text = FONT.render(f'Boost: {spaceship.boost}%', True, (255, 255, 255))
     score_text = FONT.render(f'Score: {int(spaceship.score)}', True, (255, 255, 255))
     WIN.blit(lives_text, (500, 40))
     WIN.blit(boost_text, (500, 60))
@@ -67,8 +68,16 @@ def handle_falling_boost_and_garbage(sp, spaceship, falling_boost = [], falling_
         if obj.y + OBJECTSPEED > HEIGHT:
             falling_boost.remove(obj)
         elif obj.colliderect(spaceship):
-            sp.update_lives()
+            sp.gain_boost()
             falling_boost.remove(obj)
+        else:
+            obj.y += OBJECTSPEED
+    for obj in falling_garbage:
+        if obj.y + OBJECTSPEED > HEIGHT:
+            falling_garbage.remove(obj)
+        elif obj.colliderect(spaceship):
+            sp.gain_mass()
+            falling_garbage.remove(obj)
         else:
             obj.y += OBJECTSPEED
 
@@ -78,10 +87,13 @@ def draw_game(
     draw_background()
     WIN.blit(SPACESHIP, (spaceship.x, spaceship.y))
     handle_falling_asteroids(falling_asteroids, spaceship, spObj)
+    handle_falling_boost_and_garbage(spObj, spaceship, falling_boost, falling_garbage)
     for obj in falling_asteroids:
         WIN.blit(ASTEROID, (obj.x, obj.y))
     for obj in falling_boost:
         WIN.blit(BOOST, (obj.x, obj.y))
+    for obj in falling_garbage:
+        WIN.blit(GARBAGE, (obj.x, obj.y))
     draw_text(spObj)
     pygame.display.update()
 
@@ -120,7 +132,7 @@ def main():
             speed_timer = 0
             
         
-        asteroid_interval = random.randint(60, 100)/10
+        asteroid_interval = random.randint(40, 80)/10
         asteroid_tick = clock.tick()
         asteroid_elapsed += asteroid_tick
         if asteroid_elapsed > asteroid_interval:
@@ -133,7 +145,7 @@ def main():
             falling_asteroids.append(obj)
             asteroid_elapsed = 0  
             
-        boost_interval = random.randint(60, 100)/10
+        boost_interval = random.randint(40, 100)/10
         boost_tick = clock.tick()
         boost_elapsed += boost_tick
         if boost_elapsed > boost_interval:
@@ -146,9 +158,21 @@ def main():
             falling_boost.append(obj)
             boost_elapsed = 0
             
+        garbage_interval = random.randint(40, 80)/10
+        garbage_tick = clock.tick()
+        garbage_elapsed += garbage_tick
+        if garbage_elapsed > garbage_interval:
+            obj = pygame.Rect(
+                random.randint(0, WIDTH),
+                random.randint(-WIDTH, 0),
+                GARBAGE.get_width(),
+                GARBAGE.get_height(),
+            )
+            falling_garbage.append(obj)
+            garbage_elapsed = 0  
 
         handle_movement(keys_pressed, spaceship_rect)
-        draw_game(spaceship_rect, falling_asteroids, spaceship, falling_boost)
+        draw_game(spaceship_rect, falling_asteroids, spaceship, falling_boost, falling_garbage)
         if spaceship.lives == 0:
             run = False
 
