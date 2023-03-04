@@ -43,14 +43,16 @@ def handle_movement(keys_pressed, spaceship):
         spaceship.y -= SPEED
 
 
+
 def draw_text(spaceship):
     lives_text = FONT.render('Lives:', True, (255,255,255))
     boost_text = FONT.render(f'Boost: {spaceship.boost}%', True, (255, 255, 255))
     score_text = FONT.render(f'Score: {int(spaceship.score)}', True, (255, 255, 255))
+    mass_text = FONT.render(f'Mass: {int(spaceship.mass)}', True, (255, 255, 255))
     WIN.blit(lives_text, (500, 40))
     WIN.blit(boost_text, (500, 60))
     WIN.blit(score_text, (500,20))
-
+    WIN.blit(mass_text, (500, 80))
     for life in range(1,spaceship.lives+1):
         WIN.blit(HEART, (lives_text.get_width() + 500 + HEART.get_width()*life, 40))
 
@@ -112,27 +114,44 @@ def main():
     boost_elapsed = 0
     garbage_elapsed = 0
     speed_timer = 0
+    boost_use_timer = 0
+    boost_used = False
+    SPACE_EVENT = pygame.USEREVENT + 1
     while run:
+        global SPEED 
+        global OBJECTSPEED
         spaceship.update_score(0.001)
         clock.tick(60)
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
                 run = False
+            if e.type == SPACE_EVENT:
+                SPEED /= 2
+                pygame.time.set_timer(SPACE_EVENT, 0)
+                
         keys_pressed = pygame.key.get_pressed()
         
-        
+        if keys_pressed[pygame.K_SPACE] and spaceship.boost == 100:
+            spaceship.boost = 0
+            SPEED *= 2
+            pygame.time.set_timer(SPACE_EVENT, 1500)
+            
+            
+            
+        # if boost_used:
+        #     boost_use_timer += clock.tick()
+        #     if boost_use_timer:
+        #         SPEED /= 15
+        #     boost_used = False
 
         speed_timer += clock.tick()
         if speed_timer > 300:
-            global SPEED
-            global OBJECTSPEED
             SPEED += 1
             OBJECTSPEED += 1
-            print(SPEED, OBJECTSPEED)
             speed_timer = 0
             
         
-        asteroid_interval = random.randint(40, 80)/10
+        asteroid_interval = random.randint(1, 2)
         asteroid_tick = clock.tick()
         asteroid_elapsed += asteroid_tick
         if asteroid_elapsed > asteroid_interval:
@@ -175,7 +194,7 @@ def main():
         draw_game(spaceship_rect, falling_asteroids, spaceship, falling_boost, falling_garbage)
         if spaceship.lives == 0:
             run = False
-
+        print(spaceship.speed)
     pygame.quit()
 
 
