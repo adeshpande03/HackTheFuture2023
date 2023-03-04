@@ -1,10 +1,11 @@
-SPEED = 3
+MAX_SPEED = 10
+MIN_SPEED = 3
 
 
 class Spaceship:
-    def __init__(self, mass=20):
+    def __init__(self, mass=20, speed=3):
         self.lives = 3
-        self.speed = SPEED
+        self.speed = speed
         self.mass = mass
 
     def update_lives(self):
@@ -12,7 +13,13 @@ class Spaceship:
             self.lives -= 1
 
     def update_speed(self, increase):
-        self.speed += increase
+        if self.speed + increase <= MAX_SPEED:
+            self.speed += increase
+        else:
+            self.speed = MAX_SPEED
 
     def update_mass(self, increase):
         self.mass += increase
+
+    def get_boost_percentage(self):
+        return (self.speed - MIN_SPEED) / MAX_SPEED
