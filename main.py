@@ -216,7 +216,7 @@ def main():
         if spaceship.lives == 0:
             run = False
     pygame.quit()
-
+    return spaceship.score
 
 if __name__ == "__main__":
     main()

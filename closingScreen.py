@@ -2,13 +2,13 @@ import tkinter
 import customtkinter
 
 
-def generateTitle():
-    INFOTEXT = ["Welcome to Gravity Invaders!",
-                "The object of this game is to collect space garbage!",
-                "Watch out for asteroids! If you get too close, the gravitational field may pull you in!",
-                "You will start with three lives.",
-                "If you get yourself into a sticky situation, press spacebar to temporarily accelerate!",
-                "Boost only activates when your boost percentage is at 100, so use it wisely!"]
+def generateEnd(score = 0):
+    INFOTEXT = [
+        f"Congratulations! You achieved a score of {score}!",
+        "Did you know there are over 130 million of pieces of space debris?",
+        "If these pieces of debris enter our atmosphere, they could burn up and release toxic chemicals!",
+        "Thanks for playing, and helping to clean up our corner of the galaxy 😀",
+    ]
     customtkinter.set_appearance_mode("dark")  # Modes: system (default), light, dark
     customtkinter.set_default_color_theme(
         "blue"
@@ -16,19 +16,18 @@ def generateTitle():
 
     app = customtkinter.CTk()  # create CTk window like you do with the Tk window
     app.geometry("800x800")
-    
+
     i = 0
+
     def button_function():
         nonlocal i
         if i == len(INFOTEXT) - 1:
-
             app.destroy()
         else:
             i += 1
             text_var.set(INFOTEXT[i])
 
-
-    text_var = tkinter.StringVar(value= INFOTEXT[0])
+    text_var = tkinter.StringVar(value=INFOTEXT[0])
 
     label = customtkinter.CTkLabel(
         master=app,
@@ -45,4 +44,4 @@ def generateTitle():
 
 
 if __name__ == "__main__":
-    generateTitle()
+    generateEnd()
