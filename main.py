@@ -18,7 +18,7 @@ SPACESHIP = pygame.transform.scale(SPACESHIP, (40, 40)).convert_alpha()
 
 HEART = pygame.transform.scale(pygame.image.load('heart.png'), (10,10))
 
-ASTEROID = pygame.transform.scale(pygame.image.load("asteroid.png"), (40, 40))
+ASTEROID = pygame.transform.scale(pygame.image.load("asteroid-v2.png"), (40, 40))
 BOOST = pygame.transform.scale(pygame.image.load("boost.png"), (40, 40))
 FALLING_OBJ = ["ASTEROID", "BOOST"]
 
