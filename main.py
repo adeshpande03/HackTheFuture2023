@@ -1,5 +1,6 @@
 import random
 from spaceship import *
+import titleScreen
 import pygame
 import os
 
@@ -59,6 +60,7 @@ def draw_game(spaceship, shooting_stars, falling_obj, sp):
 
 
 def main():
+    titleScreen.generateTitle()
     clock = pygame.time.Clock()
     run = True
     shooting_stars = []
@@ -74,6 +76,7 @@ def main():
             y = 0
         star = pygame.Rect(x, y, 1, 18)
         shooting_stars.append(star)
+
     while run:
         clock.tick(60)
         for e in pygame.event.get():

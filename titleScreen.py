@@ -37,7 +37,7 @@ def generateTitle():
         corner_radius=8,
     )
     label.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
-    button = customtkinter.CTkButton(master=app, text="CTkButton", command=button_function)
+    button = customtkinter.CTkButton(master=app, text="Next", command=button_function)
     button.place(relx=0.5, rely=0.7, anchor=tkinter.CENTER)
     app.mainloop()
 
