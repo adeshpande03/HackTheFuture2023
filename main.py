@@ -15,10 +15,13 @@ BACKGROUND = pygame.transform.scale(BACKGROUND, (WIDTH, HEIGHT))
 SPACESHIP = pygame.image.load("spaceship.png")
 SPACESHIP = pygame.transform.scale(SPACESHIP, (40, 40)).convert_alpha()
 
+HEART = pygame.transform.scale(pygame.image.load('heart.png'), (10,10))
+
 ASTEROID = pygame.transform.scale(pygame.image.load("asteroid.png"), (40, 40))
 BOOST = pygame.transform.scale(pygame.image.load("boost.png"), (40, 40))
-
 FALLING_OBJ = ["ASTEROID", "BOOST"]
+
+FONT = pygame.font.Font('freesansbold.ttf', 12)
 
 
 def draw_background(shooting_stars):
@@ -40,7 +43,7 @@ def handle_movement(keys_pressed, spaceship):
         spaceship.y += SPEED
     if keys_pressed[pygame.K_UP] and spaceship.y - SPEED > 0:
         spaceship.y -= SPEED
-        
+
 def draw_text(spaceship):
     lives_text = FONT.render('Lives:', True, (255,255,255))
     WIN.blit(lives_text, (500, 20))
