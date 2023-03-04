@@ -68,6 +68,7 @@ def draw_game(spaceship, shooting_stars, falling_obj, sp):
     handle_falling_obj(falling_obj, spaceship, sp)
     for obj in falling_obj:
         WIN.blit(ASTEROID, (obj.x, obj.y))
+    draw_text(sp)
     pygame.display.update()
 
 
