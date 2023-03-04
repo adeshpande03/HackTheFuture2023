@@ -101,7 +101,7 @@ def main():
     garbage_elapsed = 0
     speed_timer = 0
     while run:
-        spaceship.update_score(0.001)
+        spaceship.update_score(0.1)
         clock.tick(60)
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
