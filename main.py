@@ -45,10 +45,13 @@ def handle_movement(keys_pressed, spaceship):
 def draw_text(spaceship):
     lives_text = FONT.render('Lives:', True, (255,255,255))
     boost_text = FONT.render(f'Boost: {boost_percentage}%', True, (255, 255, 255))
-    WIN.blit(lives_text, (500, 20))
-    WIN.blit(boost_text, (500, 40))
+    score_text = FONT.render(f'Score: {int(spaceship.score)}', True, (255, 255, 255))
+    WIN.blit(lives_text, (500, 40))
+    WIN.blit(boost_text, (500, 60))
+    WIN.blit(score_text, (500,20))
+
     for life in range(1,spaceship.lives+1):
-        WIN.blit(HEART, (lives_text.get_width() + 500 + HEART.get_width()*life, 20))
+        WIN.blit(HEART, (lives_text.get_width() + 500 + HEART.get_width()*life, 40))
 
 def handle_falling_obj(falling_obj, spaceship, sp):
     for obj in falling_obj:
@@ -88,6 +91,7 @@ def main():
     garbage_elapsed = 0
     speed_timer = 0
     while run:
+        spaceship.update_score(0.001)
         clock.tick(60)
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
