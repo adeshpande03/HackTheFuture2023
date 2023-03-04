@@ -1,15 +1,15 @@
 import random
 from spaceship import *
 import pygame
-import os
+import random
 
 pygame.init()
 WIDTH, HEIGHT = 600, 800
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Spaceship Game")
 
-SPEED = 5
-OBJECTSPEED = 3
+SPEED = 3
+OBJECTSPEED = 2
 
 BACKGROUND = pygame.image.load("space-bg.jpg")
 BACKGROUND = pygame.transform.scale(BACKGROUND, (WIDTH, HEIGHT))
@@ -17,18 +17,17 @@ BACKGROUND = pygame.transform.scale(BACKGROUND, (WIDTH, HEIGHT))
 SPACESHIP = pygame.image.load("spaceship.png")
 SPACESHIP = pygame.transform.scale(SPACESHIP, (40, 40)).convert_alpha()
 
-HEART = pygame.transform.scale(pygame.image.load('heart.png'), (10,10))
+HEART = pygame.transform.scale(pygame.image.load("heart.png"), (10, 10))
 
-ASTEROID = pygame.transform.scale(pygame.image.load("asteroid-v2.png"), (50, 50))
+ASTEROID = pygame.transform.scale(pygame.image.load("asteroid-v2.png"), (60, 60))
 BOOST = pygame.transform.scale(pygame.image.load("boost.png"), (40, 40))
 FALLING_OBJ = ["ASTEROID", "BOOST"]
 
-FONT = pygame.font.Font('freesansbold.ttf', 12)
+FONT = pygame.font.Font("freesansbold.ttf", 12)
 
 
 def draw_background():
     WIN.blit(BACKGROUND, (0, 0))
-    
 
 
 def handle_movement(keys_pressed, spaceship):
@@ -41,11 +40,13 @@ def handle_movement(keys_pressed, spaceship):
     if keys_pressed[pygame.K_UP] and spaceship.y - SPEED > 0:
         spaceship.y -= SPEED
 
+
 def draw_text(spaceship):
-    lives_text = FONT.render('Lives:', True, (255,255,255))
+    lives_text = FONT.render("Lives:", True, (255, 255, 255))
     WIN.blit(lives_text, (500, 20))
-    for life in range(1,spaceship.lives+1):
-        WIN.blit(HEART, (lives_text.get_width() + 500 + HEART.get_width()*life, 20))
+    for life in range(1, spaceship.lives + 1):
+        WIN.blit(HEART, (lives_text.get_width() + 500 + HEART.get_width() * life, 20))
+
 
 def handle_falling_obj(falling_obj, spaceship, sp):
     for obj in falling_obj:
@@ -58,7 +59,9 @@ def handle_falling_obj(falling_obj, spaceship, sp):
             obj.y += OBJECTSPEED
 
 
-def draw_game(spaceship, falling_asteroids, spObj, falling_boost = [], falling_garbage = []):
+def draw_game(
+    spaceship, falling_asteroids, spObj, falling_boost=[], falling_garbage=[]
+):
     draw_background()
     WIN.blit(SPACESHIP, (spaceship.x, spaceship.y))
     handle_falling_obj(falling_asteroids, spaceship, spObj)
@@ -78,14 +81,31 @@ def main():
         WIDTH / 2, HEIGHT - 70, SPACESHIP.get_width(), SPACESHIP.get_height()
     )
     spaceship = Spaceship()
-
+    asteroid_elapsed = 0
+    boost_elapsed = 0
+    garbage_elapsed = 0
+    speed_timer = 0
     while run:
         clock.tick(60)
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
                 run = False
         keys_pressed = pygame.key.get_pressed()
-        if len(falling_asteroids) < 6:
+        
+        
+
+        speed_timer += clock.tick()
+        if speed_timer > 300:
+            global SPEED
+            global OBJECTSPEED
+            SPEED += 1
+            OBJECTSPEED += 1
+            print(SPEED, OBJECTSPEED)
+            speed_timer = 0
+        asteroid_interval = random.randint(90, 160)/10
+        asteroid_tick = clock.tick()
+        asteroid_elapsed += asteroid_tick
+        if asteroid_elapsed > asteroid_interval:
             obj = pygame.Rect(
                 random.randint(0, WIDTH),
                 random.randint(-WIDTH, 0),
@@ -93,6 +113,10 @@ def main():
                 ASTEROID.get_height(),
             )
             falling_asteroids.append(obj)
+            asteroid_elapsed = 0  
+            
+            
+
         handle_movement(keys_pressed, spaceship_rect)
         draw_game(spaceship_rect, falling_asteroids, spaceship)
         if spaceship.lives == 0:
